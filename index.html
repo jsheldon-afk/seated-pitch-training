@@ -884,7 +884,7 @@ const KEYPOINTS = [
   ["Margins: 5\u201310% today vs. 15\u201320% possible", "Marketing's 2 gaps: hard to track, doesn't fill occupancy", "Fixed costs don't move \u2014 empty seats are pure loss"],
   ["Non-negotiable: \u201cHow much of your dining room do you fill every day?\u201d", "Arc: Open \u2192 Plan \u2192 Result \u2192 Close", "They must say it's a priority \u2014 never assume it", "Bridge: recap their own words back to them"],
   ["3 thousand restaurants \u00b7 15 Michelin Stars \u00b7 165 Michelin Guide", "80% new diners \u00b7 99% retention \u00b7 zero contracts", "Avg 100 thousand/yr incremental, top performers 750 thousand+"],
-  ["3 channels: Seated App, Consumer Network, Bilt", "Bilt = 115 thousand+ income renters, 1 in 4 apartments nationally", "Flash the map if they're in a strong Bilt area"],
+  ["3 channels: Seated App, Consumer Network, Corporate", "Bilt = 115 thousand+ income renters, 1 in 4 apartments nationally", "Flash the map if they're in a strong Bilt area"],
   ["Corporate dining, mostly Monday\u2013Thursday", "Dinova guests spend ~50% more than average", "Ask: \u201cAre you partnered with any networks like this already?\u201d"],
   ["Guests always pay full price, on a linked card", "One sign-up, one account, one custom rate"],
   ["Search by vibe, neighborhood, or reward rate", "Same booking flow \u2014 no changes to operations", "Discover \u2192 dine \u2192 retarget \u2192 return"],
@@ -1029,6 +1029,30 @@ const OLY_EVENTS = [
       {name:"Joe", score:83},
     ],
   },
+  {
+    name: "Discovery Bot Event",
+    subtitle: "Placement",
+    unit: "place",
+    lowerIsBetter: true,
+    results: [
+      {name:"Simon", score:4},
+      {name:"Joe", score:2},
+      {name:"Madeleine", score:1},
+      {name:"Gladys", score:3},
+    ],
+  },
+  {
+    name: "Math Games Event",
+    subtitle: "Placement",
+    unit: "place",
+    lowerIsBetter: true,
+    results: [
+      {name:"Simon", score:1},
+      {name:"Joe", score:3},
+      {name:"Madeleine", score:2},
+      {name:"Gladys", score:4},
+    ],
+  },
 ];
 
 const MEDAL_COLORS = ["gold","silver","bronze"];
@@ -1036,7 +1060,7 @@ const MEDAL_COLORS = ["gold","silver","bronze"];
 function computeOlyStandings(){
   const totals = {};
   OLY_EVENTS.forEach(ev=>{
-    const sorted = [...ev.results].sort((a,b)=>b.score-a.score);
+    const sorted = [...ev.results].sort((a,b)=> ev.lowerIsBetter ? a.score-b.score : b.score-a.score);
     const n = sorted.length;
     sorted.forEach((r, idx)=>{
       const pts = n - idx;
@@ -1620,7 +1644,7 @@ function renderOlympics(){
   // per-event breakdown
   const eventsEl = document.getElementById("oly-events");
   eventsEl.innerHTML = OLY_EVENTS.map(ev=>{
-    const sorted = [...ev.results].sort((a,b)=>b.score-a.score);
+    const sorted = [...ev.results].sort((a,b)=> ev.lowerIsBetter ? a.score-b.score : b.score-a.score);
     const rows2 = sorted.map((r, idx)=>{
       const note = r.note ? " <span class='oly-note'>("+escapeHtml(r.note)+")</span>" : "";
       return "<div class='oly-event-row'><span class='rk'>"+(idx+1)+"</span><span class='nm'>"+escapeHtml(r.name)+note+"</span><span class='sc'>"+r.score+"</span></div>";
