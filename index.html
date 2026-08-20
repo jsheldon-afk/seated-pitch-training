@@ -407,6 +407,63 @@
     .full-item{grid-template-columns:1fr;}
     .full-side{position:static;}
   }
+  .obj-roulette{
+    --or-bg: #0f1420; --or-card: #171f30; --or-accent: #ff5b4d; --or-accent2: #ffb020;
+    --or-text: #eef1f7; --or-muted: #9aa5b8;
+    background: radial-gradient(circle at 50% 0%, #1b2440 0%, var(--or-bg) 55%);
+    color: var(--or-text); font-family:"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    display:flex; flex-direction:column; align-items:center; padding:32px 16px 48px; border-radius:16px;
+  }
+  .obj-roulette .wheel-wrap{position:relative; width:min(90vw,460px); height:min(90vw,460px); margin-bottom:24px;}
+  .obj-roulette .pointer{
+    position:absolute; top:-14px; left:50%; transform:translateX(-50%); width:0; height:0;
+    border-left:16px solid transparent; border-right:16px solid transparent; border-top:28px solid var(--or-accent);
+    z-index:5; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+  }
+  .obj-roulette #obr-wheel{
+    width:100%; height:100%; border-radius:50%;
+    box-shadow:0 0 0 6px #232d45, 0 0 40px rgba(0,0,0,0.6);
+    transition:transform 4.5s cubic-bezier(0.15,0.65,0.15,1);
+  }
+  .obj-roulette .hub{
+    position:absolute; top:50%; left:50%; width:64px; height:64px; margin:-32px 0 0 -32px;
+    background:linear-gradient(135deg, var(--or-accent2), var(--or-accent)); border-radius:50%;
+    display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.7rem;
+    text-align:center; color:#171f30; box-shadow:0 0 0 4px #0f1420, 0 4px 10px rgba(0,0,0,0.5);
+    cursor:pointer; user-select:none; z-index:4; line-height:1.1;
+  }
+  .obj-roulette .hub:active{transform:translate(-50%,-50%) scale(0.95);}
+  .obj-roulette #obr-spinBtn{
+    background:linear-gradient(135deg, var(--or-accent2), var(--or-accent)); border:none; color:#171f30;
+    font-weight:700; font-size:1rem; padding:14px 36px; border-radius:999px; cursor:pointer;
+    box-shadow:0 6px 18px rgba(255,91,77,0.35); transition:transform 0.15s ease;
+  }
+  .obj-roulette #obr-spinBtn:hover{transform:translateY(-2px);}
+  .obj-roulette #obr-spinBtn:disabled{opacity:0.5; cursor:not-allowed; transform:none;}
+  .obj-roulette .result{
+    width:min(90vw,640px); margin-top:32px; background:var(--or-card); border-radius:16px;
+    padding:22px 26px; box-shadow:0 10px 30px rgba(0,0,0,0.4); display:none;
+  }
+  .obj-roulette .result.show{display:block; animation:obrFadeIn 0.4s ease;}
+  @keyframes obrFadeIn{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);}}
+  .obj-roulette .result .tag{
+    display:inline-block; background:var(--or-accent); color:#171f30; font-weight:700; font-size:0.7rem;
+    letter-spacing:1px; text-transform:uppercase; padding:4px 10px; border-radius:999px; margin-bottom:10px;
+  }
+  .obj-roulette .result h2{margin:0 0 14px; font-size:1.25rem; line-height:1.4;}
+  .obj-roulette .result .reveal-btn{
+    background:none; border:1px solid var(--or-muted); color:var(--or-text); padding:8px 16px;
+    border-radius:999px; cursor:pointer; font-size:0.85rem; margin-bottom:14px;
+  }
+  .obj-roulette .result .reveal-btn:hover{border-color:var(--or-accent2); color:var(--or-accent2);}
+  .obj-roulette .points{display:none;}
+  .obj-roulette .points.show{display:block;}
+  .obj-roulette .points ul{margin:0 0 14px; padding-left:20px; color:#d3d9e6; line-height:1.5;}
+  .obj-roulette .points li{margin-bottom:6px;}
+  .obj-roulette .close-line{
+    background:#0f1420; border-left:3px solid var(--or-accent2); padding:10px 14px;
+    border-radius:6px; font-style:italic; color:var(--or-text);
+  }
 </style>
 </head>
 <body>
@@ -450,6 +507,7 @@
     <div class="tab" data-tab="hwaug6">Training (Aug 7)</div>
     <div class="tab" data-tab="training10">Training (Aug 10)</div>
     <div class="tab" data-tab="etiquette">Service Etiquette</div>
+    <div class="tab" data-tab="objroulette">Objection Roulette</div>
     <div class="tab" data-tab="full">Full Script + Slides</div>
     <div class="tab" data-tab="map">Script Map Flashcards</div>
     <div class="tab" data-tab="day1">Quiz</div>
@@ -556,6 +614,34 @@
     </div>
     <div class="etiq-banner">Prospects don't just buy the product &mdash; they buy the person selling it. Your delivery is part of the pitch.</div>
   </div>
+<div class="panel" id="panel-objroulette">
+  <div class="menu-head">
+    <div class="menu-eyebrow">Practice</div>
+    <div class="menu-title">Objection Roulette</div>
+    <div class="menu-sub">Spin the wheel. Handle whatever objection lands. Internalize. Adapt. Close.</div>
+  </div>
+
+  <div class="obj-roulette">
+    <div class="wheel-wrap">
+      <div class="pointer"></div>
+      <canvas id="obr-wheel" width="900" height="900"></canvas>
+      <div class="hub" id="obr-hub">SPIN</div>
+    </div>
+
+    <button id="obr-spinBtn">Spin the Wheel</button>
+
+    <div class="result" id="obr-result">
+      <span class="tag">Objection</span>
+      <h2 id="obr-objText"></h2>
+      <button class="reveal-btn" id="obr-revealBtn">Reveal talking points</button>
+      <div class="points" id="obr-pointsWrap">
+        <ul id="obr-pointsList"></ul>
+        <div class="close-line" id="obr-closeLine"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="panel" id="panel-full">
     <div class="menu-head">
       <div class="menu-eyebrow">Reference</div>
@@ -1962,6 +2048,297 @@ if(copyPromptBtn){
 renderMap();
 renderHomework();
 startDay1();
+(function(){
+ try {
+  const objections = [
+    {
+      text: "Your % is too high. My margins are only 5% \u2014 I'd be losing money.",
+      points: [
+        "Your 5% overall margin includes slow hours & empty seats \u2014 what matters is your margin on an INCREMENTAL table that wouldn't have been filled otherwise.",
+        "Example: Wednesday at 50% capacity, guest spends $100, food costs ~30% \u2192 $70 gross profit.",
+        "You pay 20% commission = $20. You still net $50 of pure incremental profit on a table that would've produced $0.",
+        "That's a 50% margin on incremental revenue. Stack enough of those and your overall margin rises 5\u201310%."
+      ],
+      close: "If we could fill even 2\u20133 of those empty Wednesday tables a week, can you see how that math works in your favor?"
+    },
+    {
+      text: "I need to run the numbers on my end and get back to you.",
+      points: [
+        "Ask: what numbers specifically? There are genuinely no numbers to run if you have any empty tables.",
+        "Seated doesn't reserve tables or guarantee covers. No fixed costs \u2014 if we send no one, you pay nothing.",
+        "The goal is simple: fill seats currently producing zero revenue."
+      ],
+      close: "What would you need to see to feel comfortable moving forward today?"
+    },
+    {
+      text: "My costs (F&B, labor, etc.) are through the roof. I can't pay for anything new.",
+      points: [
+        "Most partners are in the same position \u2014 if costs are rising, NOW is the best time to offset them via increased occupancy and sales.",
+        "No fees or contracts. Best case: we fill empty tables and improve margins. Worst case: we send no one and you pay nothing.",
+        "Cutting back hurts long-term \u2014 the goal is to drive sales up and increase cover count."
+      ],
+      close: "Are you willing to give it a shot for a few months and see what happens?"
+    },
+    {
+      text: "Just start me at 5% \u2014 what's your best rate?",
+      points: [
+        "Diners filter by reward rate (highest to lowest) \u2014 a low rate means less exposure and less traffic during your critical ramp period.",
+        "Starting low and raising later rarely happens. More likely: you call to cancel because it 'isn't working' when it never had a fair chance.",
+        "You're not just competing with other Seated restaurants \u2014 you're competing with ALL restaurants, including ones a member already knows.",
+        "Recommendation: 21\u201326% on slower days, 15\u201320% on busier days, averaging at least 18% across the week."
+      ],
+      close: "Would you be open to starting at [rate] for the first few months? Your account manager can optimize from there."
+    },
+    {
+      text: "Concern with how you calculate tax and tip in billing.",
+      points: [
+        "Most competitors bill on the full cleared amount. We bill on the cleared amount minus 18% for tips and your state-specific tax.",
+        "The 18% is based on average tipping behavior across all our markets \u2014 you're protected from outliers.",
+        "Tax is removed using an internal calculator adjusted for each market's specific rate.",
+        "We do this specifically to benefit operators \u2014 you're only ever paying on food and beverage."
+      ],
+      close: "Does knowing we're only billing on F&B clear up your concern there?"
+    },
+    {
+      text: "You'll just bring my regulars back in \u2014 I'll be paying for people who would have come anyway.",
+      points: [
+        "Seated was built to create NEW regulars for you \u2014 not steal existing ones.",
+        "Some existing guests may occasionally use Seated, but that's dwarfed by the new traffic we drive.",
+        "You can track new vs. repeat guests in real time in your merchant portal. If cannibalization spikes, call us and we'll address it immediately.",
+        "99% retention rate and 2,500+ partners \u2014 they wouldn't stay if we were just cannibalizing walk-in traffic.",
+        "Malibu Farm is booked out every weekend and still makes $20K a month from us. If we were cannibalizing them, they'd have left long ago."
+      ],
+      close: "How about we give it a few months and let the data tell the story?"
+    },
+    {
+      text: "How do I know you sent these guests and they wouldn't have come on their own?",
+      points: [
+        "The right question is: are we sending more NEW guests than people who would have come anyway?",
+        "Our members are mostly local residents, not tourists or one-time travelers \u2014 people who live near you and are actively looking to discover new spots.",
+        "Your portal shows % first-time vs. repeat Seated guests, spend amounts, visit dates, and last 4 of the card used.",
+        "We never bill you for someone who hasn't linked their card."
+      ],
+      close: "Does tracking it at that level of detail give you confidence to give it a shot?"
+    },
+    {
+      text: "I'm worried about double charges with OpenTable.",
+      points: [
+        "Our goal is to route all diners through your referral link, which carries the lower OpenTable fee.",
+        "The majority of bookings come through this link. Occasionally someone may book directly through OpenTable or walk in \u2014 the standard OT fee applies there.",
+        "You should NOT see an increase in your OpenTable bill correlated to the Seated-driven volume increase.",
+        "If you do see an influx tied to Seated traffic, we'll review and issue a refund or credit."
+      ],
+      close: "Does that give you confidence that we're not creating a double-cost situation?"
+    },
+    {
+      text: "It sounds like a lot of work to track everything.",
+      points: [
+        "Seated was designed to be as hands-on or hands-off as you want.",
+        "Everything is trackable in your merchant portal: revenue driven, last 4 of card, guest spend, visit dates.",
+        "Billing is automatic and weekly \u2014 nothing for you to manage.",
+        "You have a dedicated account manager available for any questions."
+      ],
+      close: "Does that make it feel manageable?"
+    },
+    {
+      text: "You'll only send me guests during my peak times.",
+      points: [
+        "The majority of our volume comes at off-peak times \u2014 members book last-minute, and peak times are usually already taken.",
+        "We can customize rates by day: lower rate on busy days, higher on slow days \u2014 driving volume where you need it.",
+        "If we only sent peak-time traffic, our partners would cancel. Everyone uses Seated to attack empty tables.",
+        "We can't block days/times (need full availability for Bilt, Citi, Dinova) \u2014 but we CAN customize rates by day of week."
+      ],
+      close: "What if we ran it for a few months and reviewed the day-of-week data together in your portal? Fair enough?"
+    },
+    {
+      text: "We're already full most of the time \u2014 we don't need more guests.",
+      points: [
+        "We only work with restaurants that are already busy \u2014 we curate every partner, most running at 90%+ capacity.",
+        "Our savviest operators think of Seated as an insurance policy: going from 85% to 95% full.",
+        "You're no longer banking on weather, seasonality, or walk-ins you can't control.",
+        "A 5\u201310% lift in occupancy sounds small day-to-day but is a massive improvement to profitability over a year."
+      ],
+      close: "Can you see how that extra cushion adds up over 12 months?"
+    },
+    {
+      text: "I need to talk to my partner first.",
+      points: [
+        "If the decision were entirely up to you \u2014 would YOU try it? (If no, dig for the real objection.)",
+        "Is there something about Seated you think your partner wouldn't like? Surface it now.",
+        "Always schedule a hard callback time \u2014 never leave it open-ended.",
+        "We're already 2\u20133 weeks from launch prep \u2014 secure your spot now and include your partner on the welcome call."
+      ],
+      close: "What's the soonest we can get both of you on a call this week?"
+    },
+    {
+      text: "Let's touch base in a week.",
+      points: [
+        "We're moving quickly \u2014 only launching a limited number of partners per round and we're near 90% capacity for this cohort.",
+        "No contracts, no commitments \u2014 this takes 5 minutes to get started.",
+        "I'd hate for you to miss this window and have to wait for the next round."
+      ],
+      close: "You seem open to trying this \u2014 can we just get the ball rolling now so you don't lose your spot?"
+    },
+    {
+      text: "Just send me more info and I'll let you know.",
+      points: [
+        "This almost always signals hesitation \u2014 ask directly rather than sending info and waiting.",
+        "Ask in the NEGATIVE: 'Is there anything you didn't like about Seated that would prevent you from signing up?'",
+        "Dig out the real objection: 'Oh, that's interesting...' / 'Hmm, tell me more about that...'"
+      ],
+      close: "Is there something specific holding you back that we haven't addressed yet?"
+    },
+    {
+      text: "I'm not looking to bring anything new on right now.",
+      points: [
+        "In a perfect world, restaurants wouldn't need Seated at all \u2014 but margins in this industry are the thinnest of any sector.",
+        "We work with 2,500+ restaurants, no contracts, 99% retention. They stay because we drive real, meaningful revenue.",
+        "Plenty of skeptics became our most vocal partners."
+      ],
+      close: "If Seated can fill even a few extra tables a week, is there any reason NOT to give it a shot?"
+    },
+    {
+      text: "I don't want to discount my brand.",
+      points: [
+        "Seated is NOT a discount. Guests pay full price at your restaurant \u2014 no coupons, no reduced checks.",
+        "The more they spend, the more they earn back \u2014 this incentivizes higher spend, not lower.",
+        "We work with 15 Michelin Star restaurants, 70+ Michelin guide listings, and the country's top restaurant groups \u2014 they wouldn't partner with us if we cheapened their brand.",
+        "Our goal is to attract guests who can and will pay full price \u2014 and reward them for discovering you."
+      ],
+      close: "Is a full-price diner who gets rewarded for spending more the kind of guest you're looking for?"
+    },
+    {
+      text: "I'm not comfortable providing payment info. Just send me an invoice.",
+      points: [
+        "With 2,500+ partners, we can only accept payment in a few standardized ways.",
+        "We bill weekly via ACH or credit card \u2014 both secure and automatic.",
+        "This is the same process every one of our partners goes through, including our Michelin-starred restaurants."
+      ],
+      close: "Would ACH or credit card work better for you?"
+    },
+    {
+      text: "I'm going to have to hire extra staff to handle the extra guests.",
+      points: [
+        "We're not looking to take over your dining room \u2014 just add a few extra turns at the beginning or end of the night.",
+        "Think of it as icing on the cake, not a complete shift change.",
+        "Across all the restaurants we work with, I've never once heard of anyone needing to add staff because of Seated."
+      ],
+      close: "If the extra volume is concentrated in your slower periods, does the staffing concern still feel as pressing?"
+    },
+    {
+      text: "I'm worried about POS integration complexity.",
+      points: [
+        "We don't integrate with your POS at all \u2014 it's not necessary.",
+        "Instead, we use your Merchant ID (MID). We swipe a card through your POS once to capture it \u2014 takes 2 minutes.",
+        "When a customer dines and pays with their linked card, that MID appears on the transaction and we connect it automatically.",
+        "You get full tracking of every visit without touching your POS setup."
+      ],
+      close: "Does that take the tech concern off the table?"
+    }
+  ];
+
+  const canvas = document.getElementById('obr-wheel');
+  const ctx = canvas.getContext('2d');
+  const size = canvas.width;
+  const center = size / 2;
+  const radius = size / 2 - 6;
+  const n = objections.length;
+  const arc = (2 * Math.PI) / n;
+
+  const colors = [
+    '#ff5b4d', '#ffb020', '#3fc1c9', '#5b7bd9', '#ff8a5b',
+    '#8a5bff', '#4dd68c', '#ff5b9d', '#20c9ff', '#e8d84d'
+  ];
+
+  function shortLabel(str) {
+    const words = str.replace(/[?.]$/, '').split(' ');
+    let out = '';
+    for (const w of words) {
+      if ((out + ' ' + w).trim().length > 26) break;
+      out = (out + ' ' + w).trim();
+    }
+    return out + (out.length < str.replace(/[?.]$/, '').length ? '\u2026' : '');
+  }
+
+  function drawWheel() {
+    ctx.clearRect(0, 0, size, size);
+    for (let i = 0; i < n; i++) {
+      const start = i * arc;
+      const end = start + arc;
+      ctx.beginPath();
+      ctx.moveTo(center, center);
+      ctx.arc(center, center, radius, start, end);
+      ctx.closePath();
+      ctx.fillStyle = colors[i % colors.length];
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(15,20,32,0.6)';
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+      ctx.save();
+      ctx.translate(center, center);
+      ctx.rotate(start + arc / 2);
+      ctx.textAlign = 'right';
+      ctx.fillStyle = '#0f1420';
+      ctx.font = 'bold 20px Segoe UI, sans-serif';
+      ctx.fillText(shortLabel(objections[i].text), radius - 20, 8);
+      ctx.restore();
+    }
+  }
+  drawWheel();
+
+  let currentRotation = 0;
+  let spinning = false;
+  const spinBtn = document.getElementById('obr-spinBtn');
+  const hub = document.getElementById('obr-hub');
+  const resultBox = document.getElementById('obr-result');
+  const objText = document.getElementById('obr-objText');
+  const pointsList = document.getElementById('obr-pointsList');
+  const closeLine = document.getElementById('obr-closeLine');
+  const revealBtn = document.getElementById('obr-revealBtn');
+  const pointsWrap = document.getElementById('obr-pointsWrap');
+
+  function spin() {
+    if (spinning) return;
+    spinning = true;
+    spinBtn.disabled = true;
+    resultBox.classList.remove('show');
+    pointsWrap.classList.remove('show');
+    revealBtn.textContent = 'Reveal talking points';
+
+    const extraSpins = 6 + Math.random() * 3;
+    const randomOffset = Math.random() * 2 * Math.PI;
+    const targetRotation = currentRotation + extraSpins * 2 * Math.PI + randomOffset;
+
+    canvas.style.transform = `rotate(${targetRotation}rad)`;
+    currentRotation = targetRotation;
+
+    setTimeout(() => {
+      const pointerAngle = -Math.PI / 2;
+      const normalized = (((pointerAngle - currentRotation) % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+      const index = Math.floor(normalized / arc) % n;
+      const obj = objections[index];
+
+      objText.textContent = obj.text;
+      pointsList.innerHTML = obj.points.map(p => `<li>${p}</li>`).join('');
+      closeLine.textContent = '\u2705 Close with: "' + obj.close + '"';
+      resultBox.classList.add('show');
+
+      spinning = false;
+      spinBtn.disabled = false;
+    }, 4600);
+  }
+
+  spinBtn.addEventListener('click', spin);
+  hub.addEventListener('click', spin);
+  revealBtn.addEventListener('click', () => {
+    const showing = pointsWrap.classList.toggle('show');
+    revealBtn.textContent = showing ? 'Hide talking points' : 'Reveal talking points';
+  });
+ } catch(e) {
+   console.error("Objection Roulette failed to initialize:", e);
+ }
+})();
 </script>
 </body>
 </html>
