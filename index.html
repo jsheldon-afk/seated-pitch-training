@@ -476,8 +476,9 @@
   .cal-cell.cal-empty{background:var(--sand); border-color:var(--sand);}
   .cal-cell.cal-training{background:var(--gold-light);}
   .cal-num{font-weight:700; font-size:13px; color:var(--ink);}
-  .cal-tag{font-size:9.5px; font-weight:700; letter-spacing:0.5px; text-transform:uppercase; color:#8A6A1F;}
-  .cal-legend{display:flex; gap:20px; font-size:12.5px; color:var(--sub);}
+  .cal-tag{font-size:9.5px; font-weight:700; letter-spacing:0.5px; text-transform:uppercase; color:#4A3F1F; line-height:1.3;}
+  .cal-legend{display:flex; gap:20px; font-size:12.5px; color:var(--sub); flex-wrap:wrap;}
+  .cal-legend-wrap{gap:16px 24px;}
   .cal-legend-item{display:flex; align-items:center; gap:6px;}
   .cal-swatch{width:14px; height:14px; border-radius:4px; border:1px solid var(--line); display:inline-block; background:#fff;}
   .cal-training-swatch{background:var(--gold-light); border-color:var(--gold-light);}
@@ -506,6 +507,17 @@
     <div class="cal-legend">
       <span class="cal-legend-item"><span class="cal-swatch cal-training-swatch"></span> Training day</span>
       <span class="cal-legend-item"><span class="cal-swatch"></span> No session</span>
+    </div>
+
+    <div class="menu-head" style="margin-top:36px;">
+      <div class="menu-eyebrow">Curriculum</div>
+      <div class="menu-title" style="font-size:22px;">What We're Covering Each Week</div>
+    </div>
+    <div class="cal-grid">
+      <div class='cal-row cal-head'><div class='cal-dow'>SUN</div><div class='cal-dow'>MON</div><div class='cal-dow'>TUE</div><div class='cal-dow'>WED</div><div class='cal-dow'>THU</div><div class='cal-dow'>FRI</div><div class='cal-dow'>SAT</div></div><div class='cal-row'><div class='cal-cell cal-empty'></div><div class='cal-cell cal-empty'></div><div class='cal-cell'><span class='cal-num'>1</span></div><div class='cal-cell'><span class='cal-num'>2</span></div><div class='cal-cell'><span class='cal-num'>3</span></div><div class='cal-cell'><span class='cal-num'>4</span></div><div class='cal-cell'><span class='cal-num'>5</span></div></div><div class='cal-row'><div class='cal-cell'><span class='cal-num'>6</span></div><div class='cal-cell'><span class='cal-num'>7</span></div><div class='cal-cell'><span class='cal-num'>8</span></div><div class='cal-cell'><span class='cal-num'>9</span></div><div class='cal-cell cal-training' style='background:#BFDCEF;'><span class='cal-num'>10</span><span class='cal-tag'>Intro to the Pitch + Agenda</span></div><div class='cal-cell cal-training' style='background:#BFDCEF;'><span class='cal-num'>11</span><span class='cal-tag'>Intro to the Pitch + Agenda</span></div><div class='cal-cell'><span class='cal-num'>12</span></div></div><div class='cal-row'><div class='cal-cell'><span class='cal-num'>13</span></div><div class='cal-cell cal-training' style='background:#BFDCEF;'><span class='cal-num'>14</span><span class='cal-tag'>Intro to the Pitch + Agenda</span></div><div class='cal-cell cal-training' style='background:#EDD98A;'><span class='cal-num'>15</span><span class='cal-tag'>Internalization Training</span></div><div class='cal-cell cal-training' style='background:#EDD98A;'><span class='cal-num'>16</span><span class='cal-tag'>Internalization Training</span></div><div class='cal-cell cal-training' style='background:#EDD98A;'><span class='cal-num'>17</span><span class='cal-tag'>Internalization Training</span></div><div class='cal-cell cal-training' style='background:#D6C6EF;'><span class='cal-num'>18</span><span class='cal-tag'>Discovery / Product</span></div><div class='cal-cell'><span class='cal-num'>19</span></div></div><div class='cal-row'><div class='cal-cell'><span class='cal-num'>20</span></div><div class='cal-cell cal-training' style='background:#D6C6EF;'><span class='cal-num'>21</span><span class='cal-tag'>Discovery / Product</span></div><div class='cal-cell cal-training' style='background:#D6C6EF;'><span class='cal-num'>22</span><span class='cal-tag'>Discovery / Product</span></div><div class='cal-cell cal-training' style='background:#F3C2BC;'><span class='cal-num'>23</span><span class='cal-tag'>Rates / Close</span></div><div class='cal-cell cal-training' style='background:#F3C2BC;'><span class='cal-num'>24</span><span class='cal-tag'>Rates / Close</span></div><div class='cal-cell cal-training' style='background:#F3C2BC;'><span class='cal-num'>25</span><span class='cal-tag'>Rates / Close</span></div><div class='cal-cell'><span class='cal-num'>26</span></div></div><div class='cal-row'><div class='cal-cell'><span class='cal-num'>27</span></div><div class='cal-cell cal-training' style='background:#BFE3C6;'><span class='cal-num'>28</span><span class='cal-tag'>Full Pitch Practice</span></div><div class='cal-cell cal-training' style='background:#BFE3C6;'><span class='cal-num'>29</span><span class='cal-tag'>Full Pitch Practice</span></div><div class='cal-cell cal-training' style='background:#BFE3C6;'><span class='cal-num'>30</span><span class='cal-tag'>Full Pitch Practice</span></div><div class='cal-cell cal-empty'></div><div class='cal-cell cal-empty'></div><div class='cal-cell cal-empty'></div></div>
+    </div>
+    <div class="cal-legend cal-legend-wrap">
+      <span class='cal-legend-item'><span class='cal-swatch' style='background:#BFDCEF;'></span> Intro to the Pitch + Agenda</span><span class='cal-legend-item'><span class='cal-swatch' style='background:#EDD98A;'></span> Internalization Training</span><span class='cal-legend-item'><span class='cal-swatch' style='background:#D6C6EF;'></span> Discovery / Product</span><span class='cal-legend-item'><span class='cal-swatch' style='background:#F3C2BC;'></span> Rates / Close</span><span class='cal-legend-item'><span class='cal-swatch' style='background:#BFE3C6;'></span> Full Pitch Practice</span>
     </div>
   </div>
   </div>
