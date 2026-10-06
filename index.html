@@ -483,6 +483,30 @@
   .cal-swatch{width:14px; height:14px; border-radius:4px; border:1px solid var(--line); display:inline-block; background:#fff;}
   .cal-training-swatch{background:var(--gold-light); border-color:var(--gold-light);}
 
+  button.cal-day{border-radius:0; margin:0; font:inherit; text-align:left; cursor:pointer; color:inherit; border:1px solid var(--line); transition:box-shadow .15s, transform .15s;}
+  button.cal-day:hover{box-shadow:inset 0 0 0 2px rgba(26,26,26,0.35);}
+  button.cal-day:focus-visible{outline:3px solid var(--ink); outline-offset:-3px;}
+  button.cal-day.selected{box-shadow:inset 0 0 0 3px var(--ink);}
+  .day-card{margin-top:24px; border:1px solid var(--line); border-radius:12px; background:#fff; padding:22px 24px;}
+  .day-card-top{display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap; margin-bottom:18px;}
+  .day-card-date{font-family:Georgia,"Iowan Old Style",serif; font-size:24px; font-weight:700;}
+  .day-card-meta{display:flex; align-items:center; gap:10px; margin-top:6px; font-size:13px; color:var(--sub);}
+  .day-pill{font-size:12px; font-weight:700; padding:3px 10px; border-radius:999px; color:var(--ink);}
+  .day-nav{display:flex; gap:8px;}
+  .day-nav button{font:inherit; font-size:13px; padding:7px 14px; border-radius:999px; border:1px solid var(--line); background:var(--bg); cursor:pointer;}
+  .day-nav button:hover:not(:disabled){border-color:var(--ink);}
+  .day-nav button:disabled{opacity:.4; cursor:default;}
+  .day-cols{display:grid; grid-template-columns:1fr 1fr; gap:24px;}
+  @media (max-width:720px){.day-cols{grid-template-columns:1fr;}}
+  .day-col h3{margin:0 0 8px; font-size:14px; color:var(--ink);}
+  .day-col ul{margin:0; padding-left:20px; line-height:1.55; font-size:14.5px;}
+  .day-col li{margin-bottom:6px;}
+  .day-empty{color:var(--sub); font-style:italic; font-size:14px; margin:0;}
+  .day-links{display:flex; gap:8px; flex-wrap:wrap; margin-top:18px;}
+  .day-links:empty{display:none;}
+  .day-links button{font:inherit; font-size:13px; padding:7px 14px; border-radius:8px; border:1px solid var(--gold); background:var(--gold-light); cursor:pointer;}
+  .day-links button:hover{background:var(--gold);}
+
 </style>
 </head>
 <body>
@@ -498,26 +522,30 @@
 <div class="panel active" id="panel-calendar">
     <div class="menu-head">
       <div class="menu-eyebrow">Schedule</div>
-      <div class="menu-title">September 2026</div>
-      <div class="menu-sub">Training runs every business day starting Thursday, Sept 10.</div>
+      <div class="menu-title">October 2026</div>
+      <div class="menu-sub">Training runs every business day from Wednesday, Oct 7 through Friday, Oct 30. Click a day to see the call plan and homework.</div>
     </div>
     <div class="cal-grid">
-      <div class='cal-row cal-head'><div class='cal-dow'>SUN</div><div class='cal-dow'>MON</div><div class='cal-dow'>TUE</div><div class='cal-dow'>WED</div><div class='cal-dow'>THU</div><div class='cal-dow'>FRI</div><div class='cal-dow'>SAT</div></div><div class='cal-row'><div class='cal-cell cal-empty'></div><div class='cal-cell cal-empty'></div><div class='cal-cell'><span class='cal-num'>1</span></div><div class='cal-cell'><span class='cal-num'>2</span></div><div class='cal-cell'><span class='cal-num'>3</span></div><div class='cal-cell'><span class='cal-num'>4</span></div><div class='cal-cell'><span class='cal-num'>5</span></div></div><div class='cal-row'><div class='cal-cell'><span class='cal-num'>6</span></div><div class='cal-cell'><span class='cal-num'>7</span></div><div class='cal-cell'><span class='cal-num'>8</span></div><div class='cal-cell'><span class='cal-num'>9</span></div><div class='cal-cell cal-training'><span class='cal-num'>10</span><span class='cal-tag'>Training</span></div><div class='cal-cell cal-training'><span class='cal-num'>11</span><span class='cal-tag'>Training</span></div><div class='cal-cell'><span class='cal-num'>12</span></div></div><div class='cal-row'><div class='cal-cell'><span class='cal-num'>13</span></div><div class='cal-cell cal-training'><span class='cal-num'>14</span><span class='cal-tag'>Training</span></div><div class='cal-cell cal-training'><span class='cal-num'>15</span><span class='cal-tag'>Training</span></div><div class='cal-cell cal-training'><span class='cal-num'>16</span><span class='cal-tag'>Training</span></div><div class='cal-cell cal-training'><span class='cal-num'>17</span><span class='cal-tag'>Training</span></div><div class='cal-cell cal-training'><span class='cal-num'>18</span><span class='cal-tag'>Training</span></div><div class='cal-cell'><span class='cal-num'>19</span></div></div><div class='cal-row'><div class='cal-cell'><span class='cal-num'>20</span></div><div class='cal-cell cal-training'><span class='cal-num'>21</span><span class='cal-tag'>Training</span></div><div class='cal-cell cal-training'><span class='cal-num'>22</span><span class='cal-tag'>Training</span></div><div class='cal-cell cal-training'><span class='cal-num'>23</span><span class='cal-tag'>Training</span></div><div class='cal-cell cal-training'><span class='cal-num'>24</span><span class='cal-tag'>Training</span></div><div class='cal-cell cal-training'><span class='cal-num'>25</span><span class='cal-tag'>Training</span></div><div class='cal-cell'><span class='cal-num'>26</span></div></div><div class='cal-row'><div class='cal-cell'><span class='cal-num'>27</span></div><div class='cal-cell cal-training'><span class='cal-num'>28</span><span class='cal-tag'>Training</span></div><div class='cal-cell cal-training'><span class='cal-num'>29</span><span class='cal-tag'>Training</span></div><div class='cal-cell cal-training'><span class='cal-num'>30</span><span class='cal-tag'>Training</span></div><div class='cal-cell cal-empty'></div><div class='cal-cell cal-empty'></div><div class='cal-cell cal-empty'></div></div>
+      <div class='cal-row cal-head'><div class='cal-dow'>SUN</div><div class='cal-dow'>MON</div><div class='cal-dow'>TUE</div><div class='cal-dow'>WED</div><div class='cal-dow'>THU</div><div class='cal-dow'>FRI</div><div class='cal-dow'>SAT</div></div><div class='cal-row'><div class='cal-cell cal-empty'></div><div class='cal-cell cal-empty'></div><div class='cal-cell cal-empty'></div><div class='cal-cell cal-empty'></div><div class='cal-cell'><span class='cal-num'>1</span></div><div class='cal-cell'><span class='cal-num'>2</span></div><div class='cal-cell'><span class='cal-num'>3</span></div></div><div class='cal-row'><div class='cal-cell'><span class='cal-num'>4</span></div><div class='cal-cell'><span class='cal-num'>5</span></div><div class='cal-cell'><span class='cal-num'>6</span></div><button type='button' class='cal-cell cal-day' data-day='7' style='background:#EDD98A;' aria-label='October 7, Internalization'><span class='cal-num'>7</span><span class='cal-tag'>Internalization</span></button><button type='button' class='cal-cell cal-day' data-day='8' style='background:#EDD98A;' aria-label='October 8, Internalization'><span class='cal-num'>8</span><span class='cal-tag'>Internalization</span></button><button type='button' class='cal-cell cal-day' data-day='9' style='background:#EDD98A;' aria-label='October 9, Internalization'><span class='cal-num'>9</span><span class='cal-tag'>Internalization</span></button><div class='cal-cell'><span class='cal-num'>10</span></div></div><div class='cal-row'><div class='cal-cell'><span class='cal-num'>11</span></div><button type='button' class='cal-cell cal-day' data-day='12' style='background:#EDD98A;' aria-label='October 12, Internalization'><span class='cal-num'>12</span><span class='cal-tag'>Internalization</span></button><button type='button' class='cal-cell cal-day' data-day='13' style='background:#D6C6EF;' aria-label='October 13, Discovery & Objections'><span class='cal-num'>13</span><span class='cal-tag'>Discovery & Objections</span></button><button type='button' class='cal-cell cal-day' data-day='14' style='background:#D6C6EF;' aria-label='October 14, Discovery & Objections'><span class='cal-num'>14</span><span class='cal-tag'>Discovery & Objections</span></button><button type='button' class='cal-cell cal-day' data-day='15' style='background:#D6C6EF;' aria-label='October 15, Discovery & Objections'><span class='cal-num'>15</span><span class='cal-tag'>Discovery & Objections</span></button><button type='button' class='cal-cell cal-day' data-day='16' style='background:#D6C6EF;' aria-label='October 16, Discovery & Objections'><span class='cal-num'>16</span><span class='cal-tag'>Discovery & Objections</span></button><div class='cal-cell'><span class='cal-num'>17</span></div></div><div class='cal-row'><div class='cal-cell'><span class='cal-num'>18</span></div><button type='button' class='cal-cell cal-day' data-day='19' style='background:#D6C6EF;' aria-label='October 19, Discovery & Objections'><span class='cal-num'>19</span><span class='cal-tag'>Discovery & Objections</span></button><button type='button' class='cal-cell cal-day' data-day='20' style='background:#F3C2BC;' aria-label='October 20, Rates & Math'><span class='cal-num'>20</span><span class='cal-tag'>Rates & Math</span></button><button type='button' class='cal-cell cal-day' data-day='21' style='background:#F3C2BC;' aria-label='October 21, Rates & Math'><span class='cal-num'>21</span><span class='cal-tag'>Rates & Math</span></button><button type='button' class='cal-cell cal-day' data-day='22' style='background:#F3C2BC;' aria-label='October 22, Rates & Math'><span class='cal-num'>22</span><span class='cal-tag'>Rates & Math</span></button><button type='button' class='cal-cell cal-day' data-day='23' style='background:#F3C2BC;' aria-label='October 23, Rates & Math'><span class='cal-num'>23</span><span class='cal-tag'>Rates & Math</span></button><div class='cal-cell'><span class='cal-num'>24</span></div></div><div class='cal-row'><div class='cal-cell'><span class='cal-num'>25</span></div><button type='button' class='cal-cell cal-day' data-day='26' style='background:#BFE3C6;' aria-label='October 26, Full Pitch Practice'><span class='cal-num'>26</span><span class='cal-tag'>Full Pitch Practice</span></button><button type='button' class='cal-cell cal-day' data-day='27' style='background:#BFE3C6;' aria-label='October 27, Full Pitch Practice'><span class='cal-num'>27</span><span class='cal-tag'>Full Pitch Practice</span></button><button type='button' class='cal-cell cal-day' data-day='28' style='background:#BFE3C6;' aria-label='October 28, Full Pitch Practice'><span class='cal-num'>28</span><span class='cal-tag'>Full Pitch Practice</span></button><button type='button' class='cal-cell cal-day' data-day='29' style='background:#F0A868;' aria-label='October 29, Pitch Graduation'><span class='cal-num'>29</span><span class='cal-tag'>Pitch Graduation</span></button><button type='button' class='cal-cell cal-day' data-day='30' style='background:#BFD7EA;' aria-label='October 30, Can Pitch'><span class='cal-num'>30</span><span class='cal-tag'>Can Pitch</span></button><div class='cal-cell'><span class='cal-num'>31</span></div></div>
     </div>
-    <div class="cal-legend">
-      <span class="cal-legend-item"><span class="cal-swatch cal-training-swatch"></span> Training day</span>
-      <span class="cal-legend-item"><span class="cal-swatch"></span> No session</span>
-    </div>
+    <div class="cal-legend cal-legend-wrap"><span class='cal-legend-item'><span class='cal-swatch' style='background:#EDD98A;border-color:#EDD98A;'></span> Internalization</span><span class='cal-legend-item'><span class='cal-swatch' style='background:#D6C6EF;border-color:#D6C6EF;'></span> Discovery & Objections</span><span class='cal-legend-item'><span class='cal-swatch' style='background:#F3C2BC;border-color:#F3C2BC;'></span> Rates & Math</span><span class='cal-legend-item'><span class='cal-swatch' style='background:#BFE3C6;border-color:#BFE3C6;'></span> Full Pitch Practice</span><span class='cal-legend-item'><span class='cal-swatch' style='background:#F0A868;border-color:#F0A868;'></span> Pitch Graduation</span><span class='cal-legend-item'><span class='cal-swatch' style='background:#BFD7EA;border-color:#BFD7EA;'></span> Can Pitch</span></div>
 
-    <div class="menu-head" style="margin-top:36px;">
-      <div class="menu-eyebrow">Curriculum</div>
-      <div class="menu-title" style="font-size:22px;">What We're Covering Each Week</div>
-    </div>
-    <div class="cal-grid">
-      <div class='cal-row cal-head'><div class='cal-dow'>SUN</div><div class='cal-dow'>MON</div><div class='cal-dow'>TUE</div><div class='cal-dow'>WED</div><div class='cal-dow'>THU</div><div class='cal-dow'>FRI</div><div class='cal-dow'>SAT</div></div><div class='cal-row'><div class='cal-cell cal-empty'></div><div class='cal-cell cal-empty'></div><div class='cal-cell'><span class='cal-num'>1</span></div><div class='cal-cell'><span class='cal-num'>2</span></div><div class='cal-cell'><span class='cal-num'>3</span></div><div class='cal-cell'><span class='cal-num'>4</span></div><div class='cal-cell'><span class='cal-num'>5</span></div></div><div class='cal-row'><div class='cal-cell'><span class='cal-num'>6</span></div><div class='cal-cell'><span class='cal-num'>7</span></div><div class='cal-cell'><span class='cal-num'>8</span></div><div class='cal-cell'><span class='cal-num'>9</span></div><div class='cal-cell cal-training' style='background:#EDD98A;'><span class='cal-num'>10</span><span class='cal-tag'>Internalization Training</span></div><div class='cal-cell cal-training' style='background:#EDD98A;'><span class='cal-num'>11</span><span class='cal-tag'>Internalization Training</span></div><div class='cal-cell'><span class='cal-num'>12</span></div></div><div class='cal-row'><div class='cal-cell'><span class='cal-num'>13</span></div><div class='cal-cell cal-training' style='background:#EDD98A;'><span class='cal-num'>14</span><span class='cal-tag'>Internalization Training</span></div><div class='cal-cell cal-training' style='background:#D6C6EF;'><span class='cal-num'>15</span><span class='cal-tag'>Discovery / Product</span></div><div class='cal-cell cal-training' style='background:#D6C6EF;'><span class='cal-num'>16</span><span class='cal-tag'>Discovery / Product</span></div><div class='cal-cell cal-training' style='background:#D6C6EF;'><span class='cal-num'>17</span><span class='cal-tag'>Discovery / Product</span></div><div class='cal-cell cal-training' style='background:#D6C6EF;'><span class='cal-num'>18</span><span class='cal-tag'>Discovery / Product</span></div><div class='cal-cell'><span class='cal-num'>19</span></div></div><div class='cal-row'><div class='cal-cell'><span class='cal-num'>20</span></div><div class='cal-cell cal-training' style='background:#F3C2BC;'><span class='cal-num'>21</span><span class='cal-tag'>Rates & Objections</span></div><div class='cal-cell cal-training' style='background:#F3C2BC;'><span class='cal-num'>22</span><span class='cal-tag'>Rates & Objections</span></div><div class='cal-cell cal-training' style='background:#F3C2BC;'><span class='cal-num'>23</span><span class='cal-tag'>Rates & Objections</span></div><div class='cal-cell cal-training' style='background:#F3C2BC;'><span class='cal-num'>24</span><span class='cal-tag'>Rates & Objections</span></div><div class='cal-cell cal-training' style='background:#BFE3C6;'><span class='cal-num'>25</span><span class='cal-tag'>Full Pitch Practice</span></div><div class='cal-cell'><span class='cal-num'>26</span></div></div><div class='cal-row'><div class='cal-cell'><span class='cal-num'>27</span></div><div class='cal-cell cal-training' style='background:#BFE3C6;'><span class='cal-num'>28</span><span class='cal-tag'>Full Pitch Practice</span></div><div class='cal-cell cal-training' style='background:#F0A868;'><span class='cal-num'>29</span><span class='cal-tag'>Pitch Test</span></div><div class='cal-cell cal-training' style='background:#E2DACB;'><span class='cal-num'>30</span><span class='cal-tag'>Schedule For Yourself</span></div><div class='cal-cell cal-empty'></div><div class='cal-cell cal-empty'></div><div class='cal-cell cal-empty'></div></div>
-    </div>
-    <div class="cal-legend cal-legend-wrap">
-      <span class='cal-legend-item'><span class='cal-swatch' style='background:#EDD98A;'></span> Internalization Training</span><span class='cal-legend-item'><span class='cal-swatch' style='background:#D6C6EF;'></span> Discovery / Product</span><span class='cal-legend-item'><span class='cal-swatch' style='background:#F3C2BC;'></span> Rates & Objections</span><span class='cal-legend-item'><span class='cal-swatch' style='background:#BFE3C6;'></span> Full Pitch Practice</span><span class='cal-legend-item'><span class='cal-swatch' style='background:#F0A868;'></span> Pitch Test</span><span class='cal-legend-item'><span class='cal-swatch' style='background:#E2DACB;'></span> Schedule For Yourself</span>
+    <div class="day-card" id="dayCard" aria-live="polite">
+      <div class="day-card-top">
+        <div>
+          <div class="day-card-date" id="dcDate"></div>
+          <div class="day-card-meta"><span class="day-pill" id="dcTopic"></span><span id="dcCount"></span></div>
+        </div>
+        <div class="day-nav">
+          <button type="button" id="dcPrev" aria-label="Previous training day">&larr; Prev</button>
+          <button type="button" id="dcNext" aria-label="Next training day">Next &rarr;</button>
+        </div>
+      </div>
+      <div class="day-cols">
+        <div class="day-col"><h3>On the call</h3><div id="dcCall"></div></div>
+        <div class="day-col"><h3>Homework to assign</h3><div id="dcHw"></div></div>
+      </div>
+      <div class="day-links" id="dcLinks"></div>
     </div>
   </div>
   </div>
@@ -1024,6 +1052,43 @@ document.querySelectorAll(".tab").forEach(t=>{
     document.getElementById("panel-"+t.dataset.tab).classList.add("active");
   });
 });
+
+/* ---------------- CALENDAR DAY PLANS ---------------- */
+(function(){
+  const PLAN = {"7": {"topic": "Internalization", "call": ["Introduce the Pitch Training Packet and how to use it.", "Walk through this calendar and set expectations: be on pitch training every day, cameras on unless you've told them otherwise.", "Homework takes about 30 minutes a day and should be done before the next session."], "hw": ["Read the full script and slides out loud 5 times.", "Take the quiz."], "links": [{"main": "internalization", "tab": "full", "label": "Full Script + Slides"}, {"main": "internalization", "tab": "day1", "label": "Quiz"}], "n": 1}, "8": {"topic": "Internalization", "call": ["Go through Service Etiquette and talk about why tone matters."], "hw": ["Read the full script and slides once.", "Spend 20 minutes quizzing yourself with the Script Map Flashcards."], "links": [{"main": "internalization", "tab": "etiquette", "label": "Service Etiquette"}, {"main": "internalization", "tab": "full", "label": "Full Script + Slides"}, {"main": "internalization", "tab": "map", "label": "Script Map Flashcards"}], "n": 2}, "9": {"topic": "Internalization", "call": ["Go through the Script Map Flashcards.", "Go around the call and quiz each person live."], "hw": ["For each slide, write out in your own words: (1) the point we're trying to get across, and (2) why it matters."], "links": [{"main": "internalization", "tab": "map", "label": "Script Map Flashcards"}, {"main": "internalization", "tab": "full", "label": "Full Script + Slides"}], "n": 3}, "12": {"topic": "Internalization", "call": ["Run the full script on the call, with each person taking a section."], "hw": ["Practice the full script with a buddy."], "links": [{"main": "internalization", "tab": "full", "label": "Full Script + Slides"}], "n": 4}, "13": {"topic": "Discovery & Objections", "call": ["Introduce discovery and where it fits in the pitch."], "hw": ["Write 3 questions you'd ask at each stage of the discovery framework."], "links": [{"main": "discovery", "tab": null, "label": "Intro to Discovery"}], "n": 5}, "14": {"topic": "Discovery & Objections", "call": ["Discovery practice on the call."], "hw": ["Build your own discovery framework and acronym. How would you think about discovery?"], "links": [{"main": "discovery", "tab": null, "label": "Intro to Discovery"}], "n": 6}, "15": {"topic": "Discovery & Objections", "call": ["Discovery practice on the call."], "hw": ["30 minutes of Objection Roulette."], "links": [{"main": "discovery", "tab": null, "label": "Intro to Discovery"}, {"main": "internalization", "tab": "objroulette", "label": "Objection Roulette"}], "n": 7}, "16": {"topic": "Discovery & Objections", "call": ["Intro to objections.", "Objection Roulette practice on the call."], "hw": ["30 minutes of Objection Roulette."], "links": [{"main": "internalization", "tab": "objroulette", "label": "Objection Roulette"}], "n": 8}, "19": {"topic": "Discovery & Objections", "call": ["Objection practice."], "hw": ["Watch the Bilt + Dinova map video from Taylor.", "Objection Roulette."], "links": [{"main": "internalization", "tab": "objroulette", "label": "Objection Roulette"}], "n": 9}, "20": {"topic": "Rates & Math", "call": [], "hw": [], "links": [], "n": 10}, "21": {"topic": "Rates & Math", "call": [], "hw": [], "links": [], "n": 11}, "22": {"topic": "Rates & Math", "call": [], "hw": [], "links": [], "n": 12}, "23": {"topic": "Rates & Math", "call": [], "hw": [], "links": [], "n": 13}, "26": {"topic": "Full Pitch Practice", "call": [], "hw": [], "links": [], "n": 14}, "27": {"topic": "Full Pitch Practice", "call": [], "hw": [], "links": [], "n": 15}, "28": {"topic": "Full Pitch Practice", "call": [], "hw": [], "links": [], "n": 16}, "29": {"topic": "Pitch Graduation", "call": [], "hw": [], "links": [], "n": 17}, "30": {"topic": "Can Pitch", "call": [], "hw": [], "links": [], "n": 18}};
+  const COLORS = {"Internalization": "#EDD98A", "Discovery & Objections": "#D6C6EF", "Rates & Math": "#F3C2BC", "Full Pitch Practice": "#BFE3C6", "Pitch Graduation": "#F0A868", "Can Pitch": "#BFD7EA"};
+  const days = Object.keys(PLAN).map(Number).sort((a,b)=>a-b);
+  const DOW = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+  const $ = id => document.getElementById(id);
+  const esc = s => s.replace(/[&<>]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+  const list = (items, empty) => items.length ? "<ul>"+items.map(i=>"<li>"+esc(i)+"</li>").join("")+"</ul>" : "<p class='day-empty'>"+empty+"</p>";
+  function goTo(main, tab){
+    const m = document.querySelector(".main-tab[data-main='"+main+"']"); if(m) m.click();
+    if(tab){ const t = document.querySelector(".tab[data-tab='"+tab+"']"); if(t) t.click(); }
+    window.scrollTo({top:0, behavior:"smooth"});
+  }
+  let cur;
+  function show(d){
+    cur = d; const p = PLAN[d];
+    document.querySelectorAll(".cal-day").forEach(b=>b.classList.toggle("selected", +b.dataset.day===d));
+    $("dcDate").textContent = DOW[new Date(2026,9,d).getDay()] + ", October " + d;
+    $("dcTopic").textContent = p.topic; $("dcTopic").style.background = COLORS[p.topic];
+    $("dcCount").textContent = "Day " + p.n + " of " + days.length;
+    $("dcCall").innerHTML = list(p.call, "Not planned yet.");
+    $("dcHw").innerHTML = list(p.hw, "Not planned yet.");
+    const links = $("dcLinks"); links.innerHTML = "";
+    p.links.forEach(l=>{ const b=document.createElement("button"); b.type="button"; b.textContent="Open "+l.label; b.onclick=()=>goTo(l.main,l.tab); links.appendChild(b); });
+    $("dcPrev").disabled = days.indexOf(d)===0;
+    $("dcNext").disabled = days.indexOf(d)===days.length-1;
+  }
+  document.querySelectorAll(".cal-day").forEach(b=>b.addEventListener("click", ()=>{ show(+b.dataset.day); $("dayCard").scrollIntoView({behavior:"smooth", block:"nearest"}); }));
+  $("dcPrev").onclick = ()=>show(days[days.indexOf(cur)-1]);
+  $("dcNext").onclick = ()=>show(days[days.indexOf(cur)+1]);
+  const now = new Date();
+  const today = (now.getFullYear()===2026 && now.getMonth()===9) ? now.getDate() : 0;
+  show(days.find(d=>d>=today) || days[0]);
+})();
+
 
 
 
