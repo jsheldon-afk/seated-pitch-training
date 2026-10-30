@@ -1,0 +1,299 @@
+/*
+ * Rep Playbook configuration.
+ * Everything the site shows or calculates lives here, so a manager can update it
+ * without touching app.js. Keep names spelled EXACTLY as they appear in Nooks and Salesforce.
+ *
+ * Source for every rate below: Seated calls library, Jul 31 - Oct 28 2026, based on 8 of the team's
+ * active cold callers (the list is kept off this public file).
+ * Cold rates count cadence dials within the caps (3 tries on a mobile, 5 on a restaurant line);
+ * existing-opp, billing and internal calls removed.
+ */
+window.CONFIG = {
+  // The "How it works" tab is still being finished. Set to true to bring it back.
+  showHowItWorks: false,
+
+  // ---------- Time ----------
+  repTimezoneLabel: "Eastern Time (ET)",
+  // TO CONFIRM: our three calling time zones. offsetFromET: hours behind Eastern.
+  zones: [
+    { name: "Eastern", short: "ET", offsetFromET: 0 },
+    { name: "Central", short: "CT", offsetFromET: -1 },
+    { name: "Pacific", short: "PT", offsetFromET: -3 }
+  ],
+  dayStart: "09:00",
+  dayEnd: "18:00",
+  slotMinutes: 15,
+
+  // Best windows in the RESTAURANT'S local time.
+  localWindows: {
+    mobile: ["10:30", "14:00"],          // owners' cells
+    restaurant: ["13:00", "17:00"],      // main restaurant line
+    restaurantPrime: ["15:30", "17:00"], // best restaurant-line window of the day
+    lunchRush: ["11:30", "13:00"],       // never call restaurant lines in this window (data: 1 PM restaurant dials book well)
+    dinnerStart: "17:00",                // never call restaurant lines after this
+    callbackEarliest: "09:00"            // don't call owners before this local time
+  },
+
+  // ---------- Google Calendar ----------
+  // Paste the OAuth client ID from Google Cloud here (see README). Leave "" to hide the feature.
+  googleClientId: "660445438110-v7njmd3pkaooh5ighga54gkn7ie64c4o.apps.googleusercontent.com",
+  // "email" lets the manager dashboard confirm who sent each day's numbers.
+  calendarScope: "https://www.googleapis.com/auth/calendar.events.readonly email",
+  // Web app URL of the Apps Script that stores daily numbers for the manager dashboard (see README).
+  // Leave "" to keep everything in each rep's browser.
+  dashboardEndpoint: "",
+  repTimeZone: "America/New_York",
+  // Calling blocks added from the site carry this tag in their notes, so the site
+  // recognizes them when it reads the calendar and doesn't treat them as meetings.
+  calendarBlockTag: "[Rep Playbook calling block]",
+
+  // Calling time a rep blocked on their own calendar ("Call block", "Power hour", "Dial session").
+  // Treated like the site's own calling blocks: not a meeting and not a callback. Ignored if outside guests are invited.
+  callBlockWords: ["block", "blitz", "calls", "power hour", "dial", "dials", "dialing", "prospecting", "cold call", "calling"],
+
+  // How calendar events are recognized as callbacks (they block 15 minutes and count as callback dials).
+  callbackRules: {
+    reminderText: ["REMINDER - "],          // Nooks callback reminders: always a callback
+    callbackWords: ["callback", "call back"], // a callback when no outside guests are invited
+    callWords: ["call"]                       // a callback only when nobody else is invited,
+                                              // so "Team call" with colleagues stays a meeting
+  },
+
+  // How meetings are recognized as demos. Same rules as the Demo Reminders script:
+  // a calendar event with a guest from outside these domains is a prospect meeting.
+  internalDomains: ["seatedapp.io"],
+  // Copy these from the Settings tab of the Demo Reminders sheet so both tools agree.
+  followUpWords: ["follow up", "f/u", "reconnect", "second call"], // TO CONFIRM: "Follow-up words" row
+  skipWords: [],                                                   // TO CONFIRM: "Skip words" row
+  // Meetings typed into the site have no guest list, so titles with these words count as demos.
+  demoTitleKeywords: ["demo", "intro"],
+  // Meetings in this ET window get a "move it if you can" suggestion (demos excluded).
+  protectedWindow: ["15:30", "17:00"],
+
+  // ---------- Dialing ----------
+  dialsPerHour: 45,        // Team target. Calls library, 90 days: about 40-50 per active hour (power 45, parallel 74)
+  defaultDialTarget: 120,  // kept for compatibility; the daily goal is below
+  callingDaysPerMonth: 21, // for "a month" payoffs
+  // The daily goal: "120 and 10" = 120 cold dials and 10 callbacks.
+  goalColdDials: 120,
+  goalCallbacks: 10,
+  dialsPerCallbackToday: 1,
+  demoPrepMinutes: 10,
+
+  // Share of dials that book a demo, by kind of dial (8-rep base, see top of file).
+  bookingRatePerDial: {
+    callback: 0.0357,           // any callback dial (1,036 dials)
+    agreedCallback: 0.0357,
+    missedMeetingRebook: 0.030, // team-wide; too few rebooks in the 8-rep base
+    mobileBlock: 0.0142,        // 6,049 mobile dials, 1.42%
+    restaurantBlock: 0.010,     // 6,692 restaurant-line dials, 1.00%
+    restaurantPrime: 0.0115     // team-wide 3:30-5:00 rate
+  },
+
+  // ---------- Callback facts ----------
+  callbackSpeedDemoRate: { withinOneDay: 0.158, oneToThreeDays: 0.113, overThreeDays: 0.094, never: 0 },
+  callbackVsColdMultiple: 3,      // 3.57% per callback dial vs 1.20% per cold dial
+  firstCallbackDemoRate: 0.067,
+  firstColdDialDemoRate: 0.014,
+  callbacksNeverCalledShare: 0.31,
+  callbackFirstTryPickupShare: 0.56,
+  callbackDials: 5,
+  followUpDays: [1, 2, 4, 6, 9],      // business days after the conversation
+  emailFollowUpDays: [2, 3, 5, 7, 10], // when they asked for an email first
+
+  // ---------- Accounts ----------
+  tempRejectRedistributionLabel: "about 4 months",
+  usingCompetitorReason: "DM Connect, Not Interested", // TO CONFIRM
+  noShowStep: [
+    "Move the contact to the Missed Meeting cadence and try to rebook.",
+    "If rebooking fails, Temporarily Reject the account with \u201cCL Opportunity (Did Not Hold)\u201d."
+  ],
+  phonePitchMeaning: "You gave the full pitch on this call instead of a separate demo.", // TO CONFIRM
+  phonePitchNextSteps: [
+    "Log the call in Salesforce the same way you would a held demo.",
+    "Ask your manager what comes next for this account."
+  ], // TO CONFIRM
+  liveTransferMeaning: "You handed the owner live to an AE for a demo on the spot.", // TO CONFIRM
+  liveTransferNextSteps: [
+    "Make sure the AE has the owner on the line before you hang up.",
+    "Add a note in Salesforce with what the owner told you."
+  ], // TO CONFIRM
+
+  // ---------- Logging reference (exact Nooks names) ----------
+  // counts: how the call shows up in reporting.
+  dispositions: [
+    { name: "No Answer", counts: "No Answer", prospecting: true,
+      when: "Nobody picked up.",
+      sentiments: ["No Answer", "Busy Signal"] },
+    { name: "Left Voicemail", counts: "No Answer", prospecting: true,
+      when: "You left a message.",
+      sentiments: ["Left Voicemail"] },
+    { name: "Bad Number", counts: "No Answer", prospecting: true,
+      when: "The number doesn't reach this contact.",
+      sentiments: ["Wrong Number", "Not In Service"] },
+    { name: "Gatekeeper", counts: "Connect", prospecting: true,
+      when: "Anyone who isn't the decision-maker answered.",
+      sentiments: ["GK Gave DM Info", "Gave Callback Time", "DM Not Available", "Refused to Engage / Hung Up", "Asked Not to Be Called"] },
+    { name: "Connected with DM", counts: "Connect", prospecting: true,
+      when: "You spoke with the owner, partner or GM. Salesforce marks the account DM Connect.",
+      sentiments: ["Demo Scheduled", "Phone Pitch", "Live Call Transfer", "Gave Callback Time", "Send Info Via Email", "Not Interested", "Timing Not Right", "Fully Booked", "Using Competitor", "Hung Up Before Pitch", "Language Barrier", "Asked Not to Be Called"] },
+    { name: "Existing Opportunity", counts: "Connect", prospecting: false,
+      when: "A call about a demo or deal that's already in motion.",
+      sentiments: ["Existing Opp - Following Up", "Existing Opp - Rescheduling"] },
+    { name: "MIDS/Billing/TOS", counts: "Connect", prospecting: false,
+      when: "A partner paperwork call.",
+      sentiments: ["MIDS/Billing/TOS Completed"] },
+    { name: "Churn Call", counts: "Connect", prospecting: false,
+      when: "A call with a partner who is leaving or has left.", sentiments: [] },
+    { name: "Partner Check In", counts: "Connect", prospecting: false,
+      when: "A check-in with a current partner.", sentiments: [] },
+    { name: "Internal", counts: "Excluded", prospecting: false,
+      when: "A call to a colleague. Doesn't count toward your numbers.",
+      sentiments: ["Internal"] }
+  ],
+
+  // Sentiment definitions. counts overrides the disposition when the sentiment is a Meeting.
+  sentiments: {
+    "No Answer": { def: "It rang out." },
+    "Busy Signal": { def: "The line was busy." },
+    "Left Voicemail": { def: "You left a message." },
+    "Wrong Number": { def: "Someone answered, but it isn't this contact or this restaurant." },
+    "Not In Service": { def: "The number is disconnected or doesn't work." },
+    "GK Gave DM Info": { def: "The gatekeeper gave you the owner's name, a better number or when they're in." },
+    "Gave Callback Time": { def: "You got a specific time to call back, from a gatekeeper (about the owner) or from the owner." },
+    "DM Not Available": { def: "The owner isn't there and you got nothing useful." },
+    "Refused to Engage / Hung Up": { def: "A GATEKEEPER blocked you or hung up. Never use it for the owner." },
+    "Asked Not to Be Called": { def: "Anyone asked us to stop calling." },
+    "Demo Scheduled": { def: "The owner booked a demo.", counts: "Meeting" },
+    "Phone Pitch": { def: "TO CONFIRM: you gave the full pitch on this call instead of a separate demo.", counts: "Meeting" },
+    "Live Call Transfer": { def: "TO CONFIRM: you handed the owner live to an AE for a demo on the spot.", counts: "Meeting" },
+    "Send Info Via Email": { def: "The owner wants an email before talking more." },
+    "Not Interested": { def: "The owner said no to Seated." },
+    "Timing Not Right": { def: "The owner is open, just not now (busy season, opening, renovating)." },
+    "Fully Booked": { def: "They don't need more diners. They're already full." },
+    "Using Competitor": { def: "They already use a competing product and won't switch." },
+    "Hung Up Before Pitch": { def: "The OWNER hung up before you got through the value prop." },
+    "Language Barrier": { def: "You couldn't have the conversation." },
+    "Existing Opp - Following Up": { def: "Following up on a deal that's already open." },
+    "Existing Opp - Rescheduling": { def: "Moving a demo that's already booked." },
+    "MIDS/Billing/TOS Completed": { def: "The paperwork got done." },
+    "Internal": { def: "A call to a colleague." }
+  },
+
+  // Temporarily Reject reasons, exact Salesforce picklist values.
+  tempRejectReasons: [
+    { name: "DM Connect, Not Interested", use: "You talked to the owner and they said no, for the whole restaurant. Also use it for Using Competitor.", notConfuse: "Timing Not Right. \u201cNo\u201d is about Seated; \u201cnot now\u201d is about timing." },
+    { name: "DM Connect, Timing Not Right", use: "You talked to the owner. They're open, just not now.", notConfuse: "Not Interested. Only use this when they gave a timing reason." },
+    { name: "DM Connect, Failed to Reconnect", use: "You talked to the owner once, then made all 5 callbacks with no answer.", notConfuse: "GK Connect, Unable to Reach DM. You must have spoken to the owner at least once." },
+    { name: "GK Connect, Unable to Reach DM", use: "The cadence ended. Gatekeepers picked up, but you never reached the owner.", notConfuse: "Unable to connect to a human. Use this if anyone answered." },
+    { name: "Unable to connect to a human", use: "The cadence ended with only no answers, voicemails or bad numbers.", notConfuse: "GK Connect, Unable to Reach DM. One real conversation with staff moves it there." },
+    { name: "CL Opportunity (Held Demo)", use: "TO CONFIRM: they took the demo but didn't sign, and the opportunity was closed lost.", notConfuse: "DM Connect, Not Interested, which is a no before any demo." },
+    { name: "CL Opportunity (Did Not Hold)", use: "TO CONFIRM: a demo was booked but never happened and couldn't be rebooked.", notConfuse: "A fresh no-show. Try the Missed Meeting rebook first." },
+    { name: "Temp Closed", use: "The restaurant is closed for now (renovation, seasonal) and plans to reopen.", notConfuse: "Does Not Qualify. Closed for good is Does Not Qualify." },
+    { name: "Language Barrier", use: "You couldn't have the conversation, and there's no other contact to try.", notConfuse: "Unable to connect to a human. You did reach someone." },
+    { name: "Churned Partner", use: "TO CONFIRM: they used to be a Seated partner and left.", notConfuse: "DM Connect, Not Interested. This is about their history, not today's call." },
+    { name: "Failed OB", use: "TO CONFIRM: they signed but onboarding failed and they never launched.", notConfuse: "Churned Partner. They never went live, so they didn't churn." },
+    { name: "Fully Booked (Lilia, 4 Charles, etc.)", use: "Always full. More diners isn't a fit right now.", notConfuse: "DM Connect, Not Interested. Use this when capacity is clearly the reason." }
+  ],
+
+  // ---------- Daily templates (times in ET) ----------
+  // type: prep | practice | rebooks | mobile | restaurant | prime | sweep | lunch | break | leads | wrap
+  // Non-calling time: meetings (from the calendar), demo prep, day organization prep,
+  // cold call bot practice (30 minutes, everyone, every day), cleaning leads,
+  // a 45-minute lunch and two 15-minute afternoon breaks.
+  defaultDay: [
+    { start: "09:00", end: "09:30", type: "prep" },
+    { start: "09:30", end: "10:00", type: "practice" },
+    { start: "10:00", end: "10:30", type: "rebooks" },
+    { start: "10:30", end: "12:30", type: "mobile" },
+    { start: "12:30", end: "13:15", type: "lunch" },
+    { start: "13:15", end: "14:00", type: "restaurant" },
+    { start: "14:00", end: "14:45", type: "mobile" },
+    { start: "14:45", end: "15:00", type: "break" },
+    { start: "15:00", end: "15:30", type: "sweep" },
+    { start: "15:30", end: "17:00", type: "prime" },
+    { start: "17:00", end: "17:15", type: "break" },
+    { start: "17:15", end: "17:45", type: "leads" },
+    { start: "17:45", end: "18:00", type: "wrap" }
+  ],
+  // Thursday and Friday: restaurant lines book best, so 2:00-2:30 becomes a restaurant block.
+  thuFriDay: [
+    { start: "09:00", end: "09:30", type: "prep" },
+    { start: "09:30", end: "10:00", type: "practice" },
+    { start: "10:00", end: "10:30", type: "rebooks" },
+    { start: "10:30", end: "12:30", type: "mobile" },
+    { start: "12:30", end: "13:15", type: "lunch" },
+    { start: "13:15", end: "14:30", type: "restaurant" },
+    { start: "14:30", end: "14:45", type: "mobile" },
+    { start: "14:45", end: "15:00", type: "break" },
+    { start: "15:00", end: "15:30", type: "sweep" },
+    { start: "15:30", end: "17:00", type: "prime" },
+    { start: "17:00", end: "17:15", type: "break" },
+    { start: "17:15", end: "17:45", type: "leads" },
+    { start: "17:45", end: "18:00", type: "wrap" }
+  ],
+
+  // rga: true = revenue generating activity (talking to prospects). Shown on the right of the calendar.
+  // doThis / tips: what reps see when they click a block. Edit freely.
+  blockTypes: {
+    prep: { label: "Day organization prep", dials: false, rga: false,
+      why: "Get set up before your first dial.",
+      doThis: ["Set up your calendar: book today's calling blocks and check your meetings.", "Make sure your pipeline in Salesforce is clean and up to date.", "Check you have enough leads for today (120 cold calls).", "Clear or plan any outstanding tasks in Salesloft."],
+      tips: ["Add any missing calling blocks from this page with + Calendar, then click Refresh.", "Look at today's callbacks so you know who to expect."] },
+    practice: { label: "Cold call bot practice", dials: false, rga: false,
+      why: "30 minutes with the Nooks practice bots. Warm up before your first real dial.",
+      doThis: ["Run practice calls with the Nooks cold calling bots for 30 minutes."],
+      tips: ["Practice the opener you'll use in your first block.", "Work on the objection that cost you the most demos yesterday."] },
+    rebooks: { label: "Missed meeting rebooks", dials: true, rga: true, rate: "missedMeetingRebook",
+      why: "Rebook every demo that didn't happen. Done early? Start your mobile block.",
+      doThis: ["Call everyone in your Missed Meeting (Nooks) cadence and rebook their demo.", "Reschedule any demo that needs a new time."],
+      tips: ["Rebooks book about 3% of dials, nearly 3 times a cold dial.", "No missed meetings today? Start your mobile block early."] },
+    mobile: { label: "Mobile block", dials: true, rga: true, rate: "mobileBlock",
+      why: "Owners pick up their cells late morning to early afternoon. Fresh mobiles first.",
+      doThis: ["Call from your Mobile (Nooks) cadence.", "Turn Smart Presence on.", "Filter by time zone to the zones shown on this block."],
+      tips: ["Fresh mobiles first: 1st and 2nd tries book best. Stop after 3 tries on a number.", "Ran out of calls? Use the smart lists: \u201cDidn't Answer - today\u201d, \u201cDidn't answer - yesterday\u201d, \u201cGold List - DM Asked For Callback or Email in Last 30 Days\u201d.", "Callbacks due during this block: dial them when their time comes, then keep going."] },
+    restaurant: { label: "Restaurant block", dials: true, rga: true, rate: "restaurantBlock",
+      why: "Restaurant lines work in the afternoon, after the lunch rush.",
+      doThis: ["Call from your Restaurant (Nooks) cadence.", "Turn Smart Presence on.", "Filter by time zone to the zones shown on this block."],
+      tips: ["Expect a gatekeeper. Get the owner's name, when they're in and a better number.", "Stop after 5 tries on a number.", "Never call during lunch rush or after 5 PM in the restaurant's time zone."] },
+    prime: { label: "Restaurant prime time", dials: true, rga: true, rate: "restaurantPrime",
+      why: "The best restaurant-line window of the day.",
+      doThis: ["Call from your Restaurant (Nooks) cadence.", "Turn Smart Presence on.", "Filter by time zone to the zones shown on this block."],
+      tips: ["This is when owners are on site before dinner. Ask for them by name.", "Protect this block: move internal meetings out of it."] },
+    sweep: { label: "Callback sweep", dials: true, rga: true, rate: "callback",
+      why: "Call back everyone who asked today. Same-day follow-up converts best.",
+      doThis: ["Call back every owner who asked for a callback today.", "Set a Nooks reminder for anyone you don't reach."],
+      tips: ["Callbacks within a day book about 16%; after 3 days, about 9%.", "Each callback gets 5 tries on different days and times."] },
+    lunch: { label: "Lunch", dials: false, rga: false, why: "Restaurants are mid-rush. Take your lunch.",
+      doThis: ["Step away from the phone."], tips: [] },
+    break: { label: "Break", dials: false, rga: false, why: "15 minutes away from the phone.",
+      doThis: ["Step away from the phone."], tips: [] },
+    leads: { label: "Clean leads", dials: false, rga: false,
+      why: "Fix bad numbers, add owner names and cells you learned today, and load tomorrow's lists.",
+      doThis: ["Mark bad numbers and remove dead contacts.", "Add owner names and cells you learned today.", "Make sure tomorrow has enough leads loaded."],
+      tips: ["Every owner cell you add moves that lead into the stronger mobile list."] },
+    wrap: { label: "Wrap-up", dials: false, rga: false,
+      why: "Check every call has the right disposition and sentiment. Set tomorrow's Nooks reminders.",
+      doThis: ["Check every call today has the right disposition and sentiment.", "Set Nooks reminders for tomorrow's callbacks."],
+      tips: [] }
+  },
+  // Fixed blocks around prospect meetings (demos and follow-ups).
+  demoWrapMinutes: 10,
+  meetingGuides: {
+    prep: { doThis: ["Review the restaurant and your notes in Salesforce.", "Open the demo deck and test your meeting link."], tips: [] },
+    post: { doThis: ["Log the demo or follow-up in Salesforce.", "Send the follow-up email while it's fresh."], tips: [] }
+  },
+
+
+  // Rules for moving blocks around meetings (times in ET, "HH:MM").
+  reflow: {
+    morningCallbackWindow: ["09:00", "12:00"],   // where missed meeting rebooks can move
+    afternoonSweepWindow: ["14:30", "17:00"],
+    lunchWindow: ["11:30", "14:00"],
+    minCallbackMinutes: 30,
+    lunchMinutes: 45,
+    breakWindow: ["13:00", "17:45"],      // where a break can move if a meeting covers it
+    practiceMinutes: 30,                  // required every day
+    practiceWindow: ["09:00", "17:00"]    // where practice can move if a meeting covers it
+  }
+};
